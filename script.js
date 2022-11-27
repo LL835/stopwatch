@@ -4,7 +4,7 @@ const resetButton = document.getElementById("reset-button");
 const lapButton = document.getElementById("lap-button");
 const display = document.getElementById("display");
 const lapsList = document.getElementById("laps-list");
-
+const lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
 
 let stopwatchTimer;
 let state = "paused";
@@ -19,6 +19,7 @@ startButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
 resetButton.addEventListener("click", reset)
 lapButton.addEventListener("click", split)
+document.addEventListener("DOMContentLoaded", restoreLastSession)
 
 // FUNCTIONS
 function start(){
@@ -87,4 +88,15 @@ function split(){
     lap.classList.add("lap")
     lap.innerText = display.innerText;
     lapsList.prepend(lap)
+
+    lapsStorage.push(lap.innerHTML);
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage))
+}
+function restoreLastSession(){
+    lapsStorage.forEach(item => {
+        const lap = document.createElement("li");
+        lap.classList.add("lap")
+        lap.innerText = item;
+        lapsList.prepend(lap)
+        })
 }
