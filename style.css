@@ -15,17 +15,27 @@ body {
     min-width: 100vw;
     padding: 1.5rem;
     background-color: var(--bg-clr) ;
+    display: flex;
+    flex-direction: column;
 }
-button:hover, button:focus {
-    opacity: 70%;
+.stopwatch {
+    background-color: #FFFFFF10;
+    border-radius: 0.75rem;
+}
+.laps {
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 0;
+    height: 100%;
+    overflow: auto;
+    background-color: transparent;
 }
 .stopwatch, .laps {
+    width: 100%;
     max-width: 600px;
     margin: 0 auto 10px;
     padding: 1rem;
     text-align: center;
-    background-color: #FFFFFF10;
-    border-radius: 0.75rem;
     box-shadow: rgba(0, 0, 0, 0.04) 0px 1px 2px;
 }
 #display {
@@ -49,21 +59,26 @@ button:hover, button:focus {
     padding: 10px 5px;
     cursor: pointer;
     font-family: 'Fira Sans', sans-serif;
+    position: relative;
 }
-.laps-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+.stopwatch-buttons > button::after{
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transition: all 300ms;
+    transform: scaleX(0);
 }
-#clear-laps-button{
-    background-color: #FFFFFF20;
-    padding: 10px;
-    border: none;
-    font-size: 1rem;
-    padding: 10px;
-    border-radius: 2rem;
-    cursor: pointer;
-    font-family: 'Fira Sans', sans-serif;
+.stopwatch-buttons > button:hover::after,
+.stopwatch-buttons > button:focus::after {
+    transform: scaleX(1);
+    background-color: #FCAB10;
+    opacity: 70%;
+}
+.stopwatch-buttons > button:focus {
+    outline: none;
 }
 #laps-list {
     list-style: none;
@@ -71,9 +86,7 @@ button:hover, button:focus {
     font-variant-numeric: tabular-nums;
     font-size: 1.1rem;
     text-align: center;
-    max-height: 300px;
-    overflow: auto;
-}
+ }
 .lap {
     background-color: #FFFFFF20;
     border-radius: 2.5rem;
@@ -96,7 +109,7 @@ button:hover, button:focus {
         gap: 6px;
     }
     .stopwatch-buttons > button {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     #laps-list {
         font-size: 1.2rem;
@@ -110,6 +123,6 @@ button:hover, button:focus {
         font-size: 4rem;
     }
     .stopwatch-buttons > button {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 }
