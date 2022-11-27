@@ -14,7 +14,6 @@
 body {
     min-height: 100vh;
     min-width: 100vw;
-    /* background-image: linear-gradient(to top, #EE0979, #FFA600); */
     padding: 1.5rem;
     background-color: var(--bg-clr) ;
 }
@@ -27,10 +26,11 @@ body {
     border-radius: 0.75rem;
     box-shadow: rgba(0, 0, 0, 0.04) 0px 1px 2px;
 }
-.timer {
+#timer {
     font-family: 'Barlow', sans-serif;
     font-size: 2.8rem;
     color: #FFF;
+    font-variant-numeric: tabular-nums;
 }
 .stopwatch-buttons {
     display: flex;
@@ -48,7 +48,6 @@ body {
     font-size: 1rem;
     padding: 10px 5px;
     border-radius: 2rem;
-    /* box-shadow: rgba(0, 0, 0, 0.23) 0px 6px 6px; */
     cursor: pointer;
     font-family: 'Fira Sans', sans-serif;
 }
