@@ -2,6 +2,8 @@ const startButton = document.getElementById("start-button");
 const pauseButton = document.getElementById("pause-button");
 const resetButton = document.getElementById("reset-button");
 const lapButton = document.getElementById("lap-button");
+const clearLapsButton = document.getElementById("clear-laps-button");
+
 const display = document.getElementById("display");
 const lapsList = document.getElementById("laps-list");
 const lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
@@ -18,8 +20,9 @@ let hrs = 0;
 startButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
 resetButton.addEventListener("click", reset)
-lapButton.addEventListener("click", split)
-document.addEventListener("DOMContentLoaded", restoreLastSession)
+lapButton.addEventListener("click", split);
+clearLapsButton.addEventListener("click", clearLaps)
+document.addEventListener("DOMContentLoaded", restoreLastSession);
 
 // FUNCTIONS
 function start(){
@@ -90,6 +93,13 @@ function split(){
     lapsList.prepend(lap)
 
     lapsStorage.push(lap.innerHTML);
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage))
+}
+function clearLaps(){
+    const li = document.querySelectorAll("li");
+    li.forEach(item => item.remove())
+
+    lapsStorage = [];
     localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage))
 }
 function restoreLastSession(){
