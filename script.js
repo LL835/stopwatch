@@ -5,13 +5,13 @@ const lapButton = document.getElementById("lap-button");
 const clearLapsButton = document.getElementById("clear-laps-button");
 const display = document.getElementById("display");
 const lapsList = document.getElementById("laps-list");
+
 let lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
-let stopwatchTimer;
+let interval;
 let state = "paused";
-let cs = 0;
-let secs = 0;
-let mins = 0;
-let hrs = 0;
+let startTime = 0;
+let endTime = 0;
+let timePassed = 0;
 
 // EVENT LISTENERS
 startButton.addEventListener("click", start);
@@ -23,95 +23,63 @@ document.addEventListener("DOMContentLoaded", restoreLastSession);
 
 // FUNCTIONS
 function start(){
-    // if the timer is already running, do nothing
-    if (state === "running") return;
-    // if the timer is not running, create a timer that calls startCounting on repeat.
-    stopwatchTimer = setInterval(startCounting, 10);
-    // set state to running
-    state = "running";
+    if (state === "running") return; // don't do anything if timer is already running
+    startTime = Date.now() - timePassed; // starting point. if  timePassed = 0, starting point is 00:00:00:00. if timePassed != 0, starting point is wherever the timer left off.
+    interval = setInterval(startClock, 10); // call the startClock function every centisecond
+    state = "running"; // set the state to running;
 }
 function pause(){
-    // clear the timer
-    clearInterval(stopwatchTimer);
-    state = "paused";
+    clearInterval(interval); // clear the timer
+    state = "paused" // set the state to paused
 }
 function reset(){
-    // clear the timer
-    clearInterval(stopwatchTimer);
-    state = "paused";
-    // reset all counters back to 0;
-    cs = 0;
-    secs = 0;
-    mins = 0;
-    hrs = 0;
-    // set the display back to 0
-    display.innerText = "00:00:00:00"
+    clearInterval(interval); // clear the time
+    state = "paused"; // set the state to paused
+    startTime = 0; // reset startTime the counters back to 0
+    timePassed = 0; 
+    updateDisplay(); // call updateDisplay; bc timePassed is 0, it will reset back to 00:00:00:00
 }
-function startCounting(){
-    // increment cs by 1
-    cs++;
-    // if cs = 100, 1 sec has passed so cs is back to 0 and increment secs by 1
-    if (cs === 100) {
-        cs = 0;
-        secs++;
-    };
-    // if secs = 60, 1 min has passed so secs is back to 0 and increment mins by 1
-    if (secs === 60){
-        secs = 0;
-        mins++
-    }
-    // if mins = 60, 1 hour has passed so mins is back to 0 and increment hrs by 1
-    if (mins === 60){
-        mins = 0;
-        hrs++
-    }
-    // update the page so user can see the timer
-    updateDisplay()
+function startClock(){
+    endTime = Date.now(); // get the time now (in ms). 
+    timePassed = endTime - startTime; // calculate how much time has passed since the timer started
+    updateDisplay() // update the page
 }
 function updateDisplay(){
-    // if cs, secs, mins, or hrs, is < 10, add a 0 before
-    let csFormatted = cs;
-    let secsFormatted = secs;
-    let minsFormatted = mins;
-    let hrsFormatted = hrs;
-
-    if (cs < 10) csFormatted = "0" + cs;
-    if (secs < 10) secsFormatted = "0" + secs;
-    if (mins < 10) minsFormatted = "0" + mins;
-    if (hrs < 10) hrsFormatted = "0" + hrs;
-
-    // update the page with the formated nums
-    display.innerText = hrsFormatted + ":" + minsFormatted + ":" + secsFormatted + ":" + csFormatted;
+    let remainder = timePassed; // remainder = no. of ms since start time
+    let hours = Math.floor(remainder / 3600000); // calculate how many hours can fit into remainder
+    remainder = remainder - (hours * 3600000); // how many ms are left; hours are accounted for now so remove them from the total
+    let minutes = Math.floor((remainder / 1000) / 60); // calculate how many minutes can fit into remainder
+    remainder = remainder - (minutes * 60 * 1000); // calculate how many ms are left now that hours and minutes are accounted for
+    let seconds = Math.floor(remainder / 1000); // calculate how many seconds can fit into the remainder
+    remainder = remainder - (seconds * 1000) // calculate how many ms are left now that hours, minutes, and seconds are accounted for.
+    let centiseconds = Math.floor(remainder / 10) // calculate how many centiseconds there are.
+    
+    if (hours < 10) hours = "0" + hours; // add a leading 0 before each unit if is smaller than 10
+    if (minutes < 10) minutes = "0" + minutes;
+    if (seconds < 10) seconds = "0" + seconds;
+    if (centiseconds < 10) centiseconds = "0" + centiseconds;
+    display.innerText = hours + ":" + minutes + ":" + seconds + ":" + centiseconds; // update the display on the page
 }
 function split(){
-    // stops user from saving a lap if the timer is 0
-    if (display.innerText === "00:00:00:00") return;
-
-    // create new li element and attach current display text as the content
-    const lap = document.createElement("li");
+    if (display.innerText === "00:00:00:00") return; // stop user from saving laps when no time has passed
+    const lap = document.createElement("li"); // create an li element; attach current display time and append to page;
     lap.classList.add("lap");
     lap.innerText = display.innerText;
-    lapsList.prepend(lap);
-
-    // save the lap time to local storage
-    lapsStorage.push(lap.innerHTML);
-    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage));
+    lapsList.prepend(lap); // prepend so the most recent is at the top
+    lapsStorage.push(lap.innerHTML); // add lap time to array
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage)); // update the array in local storage
 }
 function clearLaps(){
-    // select all li elements; loop through them; remove;
-    const li = document.querySelectorAll("li");
+    const li = document.querySelectorAll("li"); // select all li elements, loop through them and remove
     li.forEach(item => item.remove());
-
-    // empty the lapsStorage and update local storage to reset it
-    lapsStorage = [];
-    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage));
+    lapsStorage = []; // empty out all lap times from the array
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage)); // replace array in local storage with the empty array
 }
 function restoreLastSession(){
-    // loop through local storage array and add each lap time back on to page
     lapsStorage.forEach(item => {
         const lap = document.createElement("li");
         lap.classList.add("lap");
         lap.innerText = item;
         lapsList.prepend(lap);
-        })
+        }) // loop through the array and for each item, which is a lap time, add it back to the page
 }
