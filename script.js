@@ -3,6 +3,8 @@ const pauseButton = document.getElementById("pause-button");
 const resetButton = document.getElementById("reset-button");
 const lapButton = document.getElementById("lap-button");
 const display = document.getElementById("display");
+const lapsList = document.getElementById("laps-list");
+
 
 let stopwatchTimer;
 let state = "paused";
@@ -16,9 +18,7 @@ let hrs = 0;
 startButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
 resetButton.addEventListener("click", reset)
-lapButton.addEventListener("click", () => {
-    // run code to record a lap
-})
+lapButton.addEventListener("click", split)
 
 // FUNCTIONS
 function start(){
@@ -81,4 +81,10 @@ function updateDisplay(){
 
     // update the page with the formated nums
     display.innerText = hrsFormatted + ":" + minsFormatted + ":" + secsFormatted + ":" + csFormatted;
+}
+function split(){
+    const lap = document.createElement("li");
+    lap.classList.add("lap")
+    lap.innerText = display.innerText;
+    lapsList.prepend(lap)
 }
