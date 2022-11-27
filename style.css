@@ -1,5 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300&family=Fira+Sans:wght@200&display=swap');
+:root {
+    /* --bg-clr: #1a1a1b */
+    --bg-clr: #3E885B;
+    /* --clr-1: #FFBE0B;
+    --clr-2: #FCAB10; */
+}
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #FFF;
+}
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    /* background-image: linear-gradient(to top, #EE0979, #FFA600); */
+    padding: 1.5rem;
+    background-color: var(--bg-clr) ;
+}
+.stopwatch {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: center;
+    background-color: #FFFFFF10;
+    border-radius: 0.75rem;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 1px 2px;
+}
+.timer {
+    font-family: 'Barlow', sans-serif;
+    font-size: 2.8rem;
+    color: #FFF;
+}
+.stopwatch-buttons {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    margin-top: 1rem;
+    background-color: #FFFFFF20;
+    border-radius: 2.5rem;
+}
+.stopwatch-buttons > button {
+    background: none;
+    border: none;
+    background: var(--clr-2);
+    background-color: transparent;
+    font-size: 1rem;
+    padding: 10px 5px;
+    border-radius: 2rem;
+    /* box-shadow: rgba(0, 0, 0, 0.23) 0px 6px 6px; */
+    cursor: pointer;
+    font-family: 'Fira Sans', sans-serif;
+}
+.stopwatch-buttons > button:hover {
+    opacity: 70%;
+}
+
+@media all and (min-width: 480px) { 
+    body {
+        padding: 1.5rem;
+    }
+    .stopwatch {
+        padding: 1.25rem;
+    }
+    .timer {
+        font-size: 3.5rem;
+    }
+    .stopwatch-buttons {
+        gap: 6px;
+    }
+    .stopwatch-buttons > button {
+        font-size: 1.2rem;
+    }
+}
+@media all and (min-width: 768px) { 
+    body {
+        padding: 2.5rem;
+    }
+    .timer {
+        font-size: 4rem;
+    }
+    .stopwatch-buttons > button {
+        font-size: 1.3rem;
+    }
 }
