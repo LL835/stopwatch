@@ -6,7 +6,7 @@ const clearLapsButton = document.getElementById("clear-laps-button");
 
 const display = document.getElementById("display");
 const lapsList = document.getElementById("laps-list");
-const lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
+let lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
 
 let stopwatchTimer;
 let state = "paused";
@@ -19,7 +19,7 @@ let hrs = 0;
 // EVENT LISTENERS
 startButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
-resetButton.addEventListener("click", reset)
+resetButton.addEventListener("click", reset);
 lapButton.addEventListener("click", split);
 clearLapsButton.addEventListener("click", clearLaps)
 document.addEventListener("DOMContentLoaded", restoreLastSession);
@@ -87,26 +87,34 @@ function updateDisplay(){
     display.innerText = hrsFormatted + ":" + minsFormatted + ":" + secsFormatted + ":" + csFormatted;
 }
 function split(){
-    const lap = document.createElement("li");
-    lap.classList.add("lap")
-    lap.innerText = display.innerText;
-    lapsList.prepend(lap)
+    // stops user from saving a lap if the timer is 0
+    if (display.innerText === "00:00:00:00") return;
 
+    // create new li element and attach current display text as the content
+    const lap = document.createElement("li");
+    lap.classList.add("lap");
+    lap.innerText = display.innerText;
+    lapsList.prepend(lap);
+
+    // save the lap time to local storage
     lapsStorage.push(lap.innerHTML);
-    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage))
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage));
 }
 function clearLaps(){
+    // select all li elements; loop through them; remove;
     const li = document.querySelectorAll("li");
-    li.forEach(item => item.remove())
+    li.forEach(item => item.remove());
 
+    // empty the lapsStorage and update local storage to reset it
     lapsStorage = [];
-    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage))
+    localStorage.setItem("lapsStorage", JSON.stringify(lapsStorage));
 }
 function restoreLastSession(){
+    // loop through local storage array and add each lap time back on to page
     lapsStorage.forEach(item => {
         const lap = document.createElement("li");
-        lap.classList.add("lap")
+        lap.classList.add("lap");
         lap.innerText = item;
-        lapsList.prepend(lap)
+        lapsList.prepend(lap);
         })
 }
