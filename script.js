@@ -3,18 +3,15 @@ const pauseButton = document.getElementById("pause-button");
 const resetButton = document.getElementById("reset-button");
 const lapButton = document.getElementById("lap-button");
 const clearLapsButton = document.getElementById("clear-laps-button");
-
 const display = document.getElementById("display");
 const lapsList = document.getElementById("laps-list");
 let lapsStorage = JSON.parse(localStorage.getItem("lapsStorage")) || [];
-
 let stopwatchTimer;
 let state = "paused";
 let cs = 0;
 let secs = 0;
 let mins = 0;
 let hrs = 0;
-
 
 // EVENT LISTENERS
 startButton.addEventListener("click", start);

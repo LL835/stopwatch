@@ -17,10 +17,13 @@ body {
     background-color: var(--bg-clr) ;
     display: flex;
     flex-direction: column;
+    padding: clamp(1rem, 1.25rem, 1.5rem)
+
 }
 .stopwatch {
     background-color: #FFFFFF10;
     border-radius: 0.75rem;
+    padding: 1rem;
 }
 .laps {
     flex-grow: 1;
@@ -29,12 +32,14 @@ body {
     height: 100%;
     overflow: auto;
     background-color: transparent;
+    margin-top: 10px;
+    padding: 0 1rem;
 }
 .stopwatch, .laps {
     width: 100%;
     max-width: 600px;
-    margin: 0 auto 10px;
-    padding: 1rem;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     box-shadow: rgba(0, 0, 0, 0.04) 0px 1px 2px;
 }
@@ -97,12 +102,12 @@ body {
 }
 @media all and (min-width: 480px) { 
     body {
-        padding: 1.5rem;
+        padding: 2rem;
     }
-    .stopwatch, .laps {
+    .stopwatch{
         padding: 1.25rem;
     }
-    .timer {
+    #display {
         font-size: 3.5rem;
     }
     .stopwatch-buttons {
@@ -110,6 +115,9 @@ body {
     }
     .stopwatch-buttons > button {
         font-size: 1.1rem;
+    }
+    .laps {
+        padding: 0 1.25rem;
     }
     #laps-list {
         font-size: 1.2rem;
@@ -119,8 +127,8 @@ body {
     body {
         padding: 2.5rem;
     }
-    .timer {
-        font-size: 4rem;
+    #display {
+        font-size: 4.5rem;
     }
     .stopwatch-buttons > button {
         font-size: 1.2rem;
